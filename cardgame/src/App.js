@@ -1,34 +1,38 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import "./App.css";
+import PokeCard from "../src/components/PokeCard";
 
 const App = () => {
-  const [pokeName, setPokeName] = useState([]);
-  const [pokeImg, setPokeImg] = useState("");
+  const [pokeImg, setPokeImg] = useState({});
+  const [pokeName, setPokeName] = useState("");
 
-  // Used to get Data on Load - useEffect
   useEffect(() => {
     // async function called to fetch then setState
     const getData = async () => {
-      // Makes request to database
-      let res = await axios.get(
-        "https://pokeapi.co/api/v2/pokemon");
-
-      // Parses Response if needed
-      
-
-      // sets the state with the fetched data
-     
+      let res = await axios.get("https://pokeapi.co/api/v2/pokemon/6");
+      console.log(res.data);
+      setPokeImg({
+        frontImg: res?.data?.sprites?.front_default,
+        backImg: res?.data?.sprites?.back_default,
+      });
+      setPokeName(res?.data?.name);
+      // Parses Response if needed - possibly optional
     };
 
+    // Now call the method to be run after you create it.
     getData();
   }, []);
 
   return (
     <>
-     <h2>{pokeName}</h2>
-     <img src={pokeImg} />
+      <PokeCard
+        frontImg={pokeImg.frontImg}
+        backImg={pokeImg.backImg}
+        name={pokeName}
+      />
+      />
+    </>
   );
 };
-
 export default App;
